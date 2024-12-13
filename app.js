@@ -8,6 +8,7 @@ const materialRoutes = require('./routes/materialRoutes');
 const consultationRoutes = require('./routes/consultationRoutes');
 const eventRoutes = require('./routes/eventRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const healthRoute = require('./routes/healthRoutes');
 
 const app = express();
 
@@ -25,5 +26,6 @@ app.use('/portfolio', portfolioRoutes);       // 포트폴리오 관련 라우�
 app.use('/material', materialRoutes);         // 자재 확인 라우트
 app.use('/consultation', consultationRoutes); // 상담 문의 라우트
 app.use('/event', eventRoutes);               // 공지사항 및 이벤트 라우트
+app.use('/health', healthRoute);
 
 module.exports = app;

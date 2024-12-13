@@ -2,8 +2,8 @@ const db = require('../config/dbConfig');
 
 exports.findByCompany = async (company) => {
     const query = company === 'hyundai' ? 
-        'SELECT product_name, pattern, coating FROM hyundai_materials' : 
-        'SELECT product_name, category FROM lx_materials';
+        'SELECT product_name, pattern, coating, image_url FROM hyundai_materials' : 
+        'SELECT product_name, category, image_url FROM lx_materials';
     return db.query(query);
 };
 

@@ -4,7 +4,7 @@ const mysql = require('mysql2/promise');
 const pool = mysql.createPool({
     host: 'websw-database.chkceguqisbl.ap-northeast-2.rds.amazonaws.com', // DB 호스트
     user: 'admin', // DB 사용자명
-    password: '', // DB 비밀번호
+    password: 'websw777&', // DB 비밀번호
     database: 'WEB_DATA', // DB 이름
     port: 3306, // 포트번호
     waitForConnections: true, // 연결 대기 설정

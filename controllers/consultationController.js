@@ -1,19 +1,19 @@
 const consultationService = require('../services/consultationService');
+const bcrypt = require('bcrypt');
 const uploadImageToS3 = require('../utils/s3Uploader');
 
 exports.createConsultation = async (req, res) => {
     try {
         const {
-            name, phone_number, email, consultation_date,
-            password, possible_start_date, address,
-            project_details, estimated_budget
+            title, contact, email, startDate, endDate,
+            password, address, area, budget
         } = req.body;
 
         // 비밀번호 암호화
         const hashedPassword = await bcrypt.hash(password, 10);
 
         let imageUrls = [];
-        if (req.files) { // Multer로 받은 이미지 파일들
+        if (req.files) {
             for (const file of req.files) {
                 const imageUrl = await uploadImageToS3(file);
                 imageUrls.push(imageUrl);
@@ -21,15 +21,15 @@ exports.createConsultation = async (req, res) => {
         }
 
         await consultationService.create({
-            name,
-            phone_number,
+            title,
+            contact,
             email,
-            consultation_date,
+            startDate,
+            endDate,
             password: hashedPassword,
-            possible_start_date,
             address,
-            project_details,
-            estimated_budget,
+            area,
+            budget,
             images: JSON.stringify(imageUrls),
         });
 
