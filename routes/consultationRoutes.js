@@ -15,4 +15,8 @@ router.get('/', consultationController.getAllConsultations);
 
 router.get('/:id', consultationController.getConsultationById);
 
+router.delete('/:id', consultationController.deleteConsultation);
+
+router.put('/:id', consultationController.updateConsultation);
+
 module.exports = router;

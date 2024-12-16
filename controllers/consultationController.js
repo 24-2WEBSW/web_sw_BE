@@ -5,8 +5,8 @@ const uploadImageToS3 = require('../utils/s3Uploader');
 exports.createConsultation = async (req, res) => {
     try {
         const {
-            title, contact, email, startDate, endDate,
-            password, address, area, budget
+            name, title, contact, content, email, startDate, endDate,
+            password, address, area, budget, created_at
         } = req.body;
 
         // 비밀번호 암호화
@@ -21,8 +21,10 @@ exports.createConsultation = async (req, res) => {
         }
 
         await consultationService.create({
+            name,
             title,
             contact,
+            content,
             email,
             startDate,
             endDate,
@@ -31,6 +33,7 @@ exports.createConsultation = async (req, res) => {
             area,
             budget,
             images: JSON.stringify(imageUrls),
+            created_at,
         });
 
         res.status(201).json({ message: 'Consultation created successfully' });
@@ -89,5 +92,48 @@ exports.verifyPassword = async (req, res) => {
     } catch (error) {
         console.error('Error verifying password:', error);
         res.status(500).json({ message: 'Failed to verify password', error: error.message });
+    }
+};
+
+exports.deleteConsultation = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // 삭제 실행
+        await consultationService.delete(id);
+
+        res.status(200).json({ message: 'Deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Failed to delete', error: error.message });
+    }
+};
+
+exports.updateConsultation = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            name, startDate, address, area, budget, password, images, title, content, contact, email, endDate
+        } = req.body;
+
+        await consultationService.update(id, {
+            name,
+            startDate,
+            address,
+            area,
+            budget,
+            password,
+            images: JSON.stringify(images), // JSON 형식으로 저장
+            title,
+            content,
+            contact,
+            email,
+            endDate,
+        });
+
+        res.status(200).json({ message: 'Updated successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Failed to update', error: error.message });
     }
 };

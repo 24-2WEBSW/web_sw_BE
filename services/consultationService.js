@@ -19,3 +19,11 @@ exports.authenticate = async (id, password) => {
 exports.fetchById = async (id) => {
     return await consultationModel.findById(id);
 };
+
+exports.delete = async (id) => {
+    await consultationModel.deleteById(id);
+};
+
+exports.update = async (id, data) => {
+    await consultationModel.updateById(id, data);
+};

@@ -1,7 +1,7 @@
 const db = require('../config/dbConfig');
 
 exports.findAll = async () => {
-    return db.query('SELECT id, title, event_date FROM events');
+    return db.query('SELECT id, title, event_date FROM events ORDER BY event_date DESC');
 };
 
 exports.insert = async (data) => {
