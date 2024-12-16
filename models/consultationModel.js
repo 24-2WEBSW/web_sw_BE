@@ -23,7 +23,7 @@ exports.insert = async (data) => {
 
 // 모든 문의 데이터 가져오기
 exports.findAll = async () => {
-    const [rows] = await db.query('SELECT * FROM consultations ORDER BY created_at DESC');
+    const [rows] = await db.query('SELECT * FROM consultations');
     return rows;
 };
 

@@ -1,4 +1,5 @@
 const portfolioService = require('../services/portfolioService');
+const uploadImageToS3 = require('../utils/s3Uploader2');
 
 exports.getPortfolios = async (req, res) => {
     try {
@@ -21,5 +22,43 @@ exports.getPortfolioById = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Failed to fetch portfolio', error: error.message });
+    }
+};
+
+
+exports.createPortfolio = async (req, res) => {
+    try {
+        const {
+            title, content, blog_link
+        } = req.body;
+
+        let imageUrls = [];
+        let mainImage = null;
+
+        if (req.files) {
+            for (const [index, file] of req.files.entries()) {
+                const imageUrl = await uploadImageToS3(file);
+                imageUrls.push(imageUrl);
+
+                // 첫 번째 이미지를 메인 이미지로 설정
+                if (index === 0) {
+                    mainImage = imageUrl;
+                }
+            }
+        }
+
+        // 포트폴리오 저장
+        await portfolioService.create({
+            title,
+            content,
+            blog_link,
+            main_image: mainImage,
+            images: JSON.stringify(imageUrls),
+        });
+
+        res.status(201).json({ message: 'Portfolio created successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Failed to create portfolio', error: error.message });
     }
 };
