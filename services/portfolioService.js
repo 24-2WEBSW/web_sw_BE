@@ -23,3 +23,11 @@ exports.create = async (data) => {
         data.images,
     ]);
 };
+
+exports.delete = async (id) => {
+    await portfolioModel.deleteById(id);
+};
+
+exports.update = async (id, data) => {
+    await portfolioModel.updateById(id, data);
+};

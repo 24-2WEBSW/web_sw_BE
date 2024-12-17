@@ -14,3 +14,22 @@ exports.findById = async (id) => {
     const [rows] = await db.query(query, [id]); // rows가 배열이어야 함
     return rows[0]; // 배열에서 첫 번째 객체를 반환
 };
+
+exports.deleteById = async (id) => {
+    const query = 'DELETE FROM events WHERE id = ?';
+    await db.query(query, [id]);
+};
+
+exports.updateById = async (id, data) => {
+    const query = `
+        UPDATE events
+        SET title = ?, event_date = ?, content = ?
+        WHERE id = ?
+    `;
+    await db.query(query, [
+        data.title,
+        data.event_date,
+        data.content,
+        id,
+    ]);
+};

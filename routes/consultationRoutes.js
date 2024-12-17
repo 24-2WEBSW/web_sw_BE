@@ -17,6 +17,6 @@ router.get('/:id', consultationController.getConsultationById);
 
 router.delete('/:id', consultationController.deleteConsultation);
 
-router.put('/:id', consultationController.updateConsultation);
+router.put('/:id', upload.array('images'), consultationController.updateConsultation);
 
 module.exports = router;

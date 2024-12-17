@@ -40,22 +40,24 @@ exports.deleteById = async (id) => {
 exports.updateById = async (id, data) => {
     const query = `
         UPDATE consultations
-        SET name = ?, startDate = ?, address = ?, area = ?, budget = ?, password = ?, images = ?, title = ?, content = ?, contact = ?, email = ?, endDate = ?
+        SET name = ?, title = ?, contact = ?, content = ?, email = ?, startDate = ?, endDate = ?,
+            password = ?, address = ?, area = ?, budget = ?, images = ?, created_at = ?
         WHERE id = ?
     `;
     await db.query(query, [
         data.name,
+        data.title,
+        data.contact,
+        data.content,
+        data.email,
         data.startDate,
+        data.endDate,
+        data.password,
         data.address,
         data.area,
         data.budget,
-        data.password,
         data.images,
-        data.title,
-        data.content,
-        data.contact,
-        data.email,
-        data.endDate,
+        data.created_at,
         id,
     ]);
 };

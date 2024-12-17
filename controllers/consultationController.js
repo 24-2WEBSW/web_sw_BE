@@ -111,29 +111,47 @@ exports.deleteConsultation = async (req, res) => {
 
 exports.updateConsultation = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } = req.params; // 수정할 데이터의 ID
         const {
-            name, startDate, address, area, budget, password, images, title, content, contact, email, endDate
+            name, title, contact, content, email, startDate, endDate,
+            password, address, area, budget, created_at
         } = req.body;
 
-        await consultationService.update(id, {
+        // 비밀번호 암호화
+        const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
+
+        // 이미지 업로드 처리
+        let imageUrls = [];
+        if (req.files) {
+            for (const file of req.files) {
+                const imageUrl = await uploadImageToS3(file);
+                imageUrls.push(imageUrl);
+            }
+        }
+
+        // 새 데이터를 생성과 동일하게 구성
+        const updatedData = {
             name,
+            title,
+            contact,
+            content,
+            email,
             startDate,
+            endDate,
+            password: hashedPassword,
             address,
             area,
             budget,
-            password,
-            images: JSON.stringify(images), // JSON 형식으로 저장
-            title,
-            content,
-            contact,
-            email,
-            endDate,
-        });
+            images: JSON.stringify(imageUrls),
+            created_at,
+        };
 
-        res.status(200).json({ message: 'Updated successfully' });
+        // 업데이트 실행
+        await consultationService.update(id, updatedData);
+
+        res.status(200).json({ message: 'Consultation updated successfully' });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Failed to update', error: error.message });
+        console.error('Error updating consultation:', error);
+        res.status(500).json({ message: 'Failed to update consultation', error: error.message });
     }
 };
