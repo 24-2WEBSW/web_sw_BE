@@ -17,7 +17,7 @@ exports.create = async (data) => {
     `;
     await db.query(query, [
         data.title,
-        data.contact,
+        data.content,
         data.blog_link,
         data.main_image,
         data.images,
